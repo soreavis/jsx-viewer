@@ -15,7 +15,7 @@ node jsx-viewer.js <file.jsx> [--port <n>] [--export]
 
 The first argument that does not begin with `--` is treated as the input file. Pass more than one and the last wins.
 
-**The extension matters in export mode.** The output name is the input name with a trailing `.jsx` replaced by `.html`. A file that does not end in `.jsx` has nothing to replace, so the output path is the same as the input path and the source file is overwritten with the generated HTML. Keep the `.jsx` extension, or copy the file before exporting.
+**The extension affects the output name.** Export strips a trailing `.jsx` and appends `.html`, so `App.jsx` writes `App.html`. Any other extension is kept and `.html` is appended: `App.js` writes `App.js.html`. The output path can never equal the input path, so exporting will not overwrite your source.
 
 ## Ports
 

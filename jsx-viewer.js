@@ -388,9 +388,12 @@ if (exportMode) {
   const raw = fs.readFileSync(targetFile, "utf-8");
   const transformed = transformSource(raw);
   const html = generateExportHTML(transformed);
+  // basename strips the suffix only when it is there. Substituting `.jsx` with
+  // `.html` left any other extension untouched, so the output path equalled the
+  // input path and --export overwrote the source file it had just read.
   const outputFile = path.join(
     path.dirname(targetFile),
-    fileName.replace(/\.jsx$/, ".html")
+    path.basename(fileName, ".jsx") + ".html"
   );
   fs.writeFileSync(outputFile, html, "utf-8");
   console.log(`\n  Exported: ${outputFile}\n`);

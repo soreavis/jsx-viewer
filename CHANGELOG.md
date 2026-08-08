@@ -6,6 +6,16 @@ This project follows [Keep a Changelog](https://keepachangelog.com/) and [Semant
 
 ## [Unreleased]
 
+### Fixed
+- `--export` no longer overwrites its own input. The output name was produced by
+  substituting `.jsx` with `.html`, which left any other extension unchanged, so
+  the output path equalled the input path and the source file was replaced by the
+  generated HTML. Export now strips a trailing `.jsx` and appends `.html`.
+
+### Added
+- `docs/` — getting started, CLI reference, how it works, supported syntax, and
+  troubleshooting.
+
 ## [1.0.0] — 2026-03-15
 
 ### Added

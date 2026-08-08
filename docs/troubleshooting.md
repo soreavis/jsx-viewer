@@ -38,9 +38,11 @@ Open the browser console. The overlay in the exported file reports transpilation
 
 Also check the network. The export embeds your source but still loads React and Babel from unpkg at page open, so it fails offline or behind a proxy that blocks the CDN.
 
-## Export overwrote my source file
+## Export wrote a file named `something.js.html`
 
-The output name is the input name with a trailing `.jsx` replaced by `.html`. If the input did not end in `.jsx`, the two paths are identical and the source is replaced by the generated HTML. Recover it from version control, and keep the `.jsx` extension.
+Export strips a trailing `.jsx` and appends `.html`. An input with any other extension keeps it, so `App.js` becomes `App.js.html`. Rename the input to `.jsx` if you want a clean `App.html`.
+
+Before v1.0.1 this case overwrote the input file, because the output name was produced by substituting `.jsx` with `.html` and a non-matching extension left the path unchanged.
 
 ## Behaviour differs between the dev server and the export
 
