@@ -1,4 +1,4 @@
-# jsx-viewer
+# JSX Viewer
 
 [![CI](https://github.com/soreavis/jsx-viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/soreavis/jsx-viewer/actions/workflows/ci.yml)
 ![License](https://img.shields.io/badge/license-MIT-blue)
@@ -27,7 +27,7 @@ Zero-dependency Node.js tool that serves a JSX file in your browser with live re
 ### 1. Clone
 
 ```bash
-git clone git@github.com:soreavis/jsx-viewer.git
+git clone https://github.com/soreavis/jsx-viewer.git
 cd jsx-viewer
 ```
 
@@ -76,6 +76,9 @@ Export mode skips the server and writes a self-contained HTML file with the tran
 
 ### Export HTML is blank
 - Open the browser console — a transpilation or runtime error is likely. The same error overlay visible in the dev server is present in the exported file.
+
+### Which import forms are supported
+- `import React from "react"`, `import { useState } from "react"`, `import React, { useState, useEffect } from "react"`, and `import * as React from "react"` all work. Only `react`, `react-dom` and `react-dom/client` map to CDN globals; anything else is skipped with a console warning.
 
 ## Credits
 

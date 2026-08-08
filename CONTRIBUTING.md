@@ -5,7 +5,7 @@ Contributions are welcome.
 ## Getting started
 
 ```bash
-git clone git@github.com:soreavis/jsx-viewer.git
+git clone https://github.com/soreavis/jsx-viewer.git
 cd jsx-viewer
 ```
 
@@ -17,7 +17,7 @@ No tests configured yet. To manually verify, run:
 
 ```bash
 node --check jsx-viewer.js
-node jsx-viewer.js --help 2>&1 || true
+node jsx-viewer.js --help
 ```
 
 ## Linting

@@ -20,7 +20,16 @@ let targetFile = null;
 let port = DEFAULT_PORT;
 let exportMode = false;
 
+const USAGE = "\n  Usage: node jsx-viewer.js <file.jsx> [--port 3742] [--export]\n\n" +
+  "    --port <n>   port to serve on (default 3742, auto-increments if taken)\n" +
+  "    --export     write a standalone .html next to the input and exit\n" +
+  "    --help, -h   show this message\n";
+
 const args = process.argv.slice(2);
+if (args.includes("--help") || args.includes("-h")) {
+  console.log(USAGE);
+  process.exit(0);
+}
 for (let i = 0; i < args.length; i++) {
   if (args[i] === "--port" && args[i + 1]) {
     port = parseInt(args[i + 1], 10);
@@ -33,7 +42,7 @@ for (let i = 0; i < args.length; i++) {
 }
 
 if (!targetFile) {
-  console.error("\n  Usage: node jsx-viewer.js <file.jsx> [--port 3742] [--export]\n");
+  console.error(USAGE);
   process.exit(1);
 }
 
@@ -68,10 +77,16 @@ function transformSource(raw) {
       }
       // import X from "mod" (default import)
       if (!trimmed.startsWith("{")) {
-        // Could be: import React, { useState } from "react"
-        if (trimmed.includes(",")) {
-          const [defaultImport, rest] = trimmed.split(",", 2);
-          return `const ${defaultImport.trim()} = ${global};\nconst ${rest.trim()} = ${global};`;
+        // Could be: import React, { useState, useEffect } from "react"
+        // Split on the FIRST comma only, and keep everything after it. JS's
+        // split(",", 2) caps the RESULT LENGTH and discards the remainder — it
+        // is not Python's maxsplit — so it silently dropped every named import
+        // past the first, emitting `const { useState = window.React;`.
+        const comma = trimmed.indexOf(",");
+        if (comma !== -1) {
+          const defaultImport = trimmed.slice(0, comma).trim();
+          const rest = trimmed.slice(comma + 1).trim();
+          return `const ${defaultImport} = ${global};\nconst ${rest} = ${global};`;
         }
         return `const ${trimmed} = ${global};`;
       }
@@ -487,7 +502,9 @@ function openBrowser(url) {
 // --- Start ---
 
 function tryListen(currentPort, attempts) {
-  server.listen(currentPort, () => {
+  // Loopback only. /source.jsx serves the watched file's contents, so binding
+  // 0.0.0.0 published it to the whole LAN while the console said "localhost".
+  server.listen(currentPort, "127.0.0.1", () => {
     const url = `http://localhost:${currentPort}`;
     console.log(`\n  JSX Viewer`);
     console.log(`  File:    ${targetFile}`);
