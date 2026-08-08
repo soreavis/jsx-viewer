@@ -1,5 +1,9 @@
 name: CI
 on: [push, pull_request]
+
+permissions:
+  contents: read
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -8,5 +12,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
+
+      # Validates the transformer's OWN syntax. Says nothing about the syntax of
+      # what it emits — the two are independent, which is how a transform that
+      # produced unparseable code shipped green.
       - name: Check syntax
         run: node --check jsx-viewer.js
+
+      # Exports fixtures through the real CLI and parses the emitted import
+      # block. This is the gate that catches broken output.
+      - name: Transform output parses
+        run: node test/transform.test.js
+
+      # Private data is the one class of defect a later commit cannot undo.
+      - name: No private data
+        run: node test/hygiene.test.js
