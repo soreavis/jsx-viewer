@@ -1,5 +1,7 @@
 # JSX Viewer
 
+![A maker at a cluttered workbench in a dim workshop holds up a framed pane of glass; inside the frame, the drawing on the bench appears as a warmly lit building, against blue twilight through a tall window.](docs/assets/hero.jpg)
+
 [![CI](https://github.com/soreavis/jsx-viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/soreavis/jsx-viewer/actions/workflows/ci.yml)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Node](https://img.shields.io/badge/node-%3E%3D18-green?logo=nodedotjs&logoColor=white)
@@ -27,6 +29,7 @@ Zero-dependency Node.js tool that serves a JSX file in your browser with live re
 ### 1. Clone
 
 ```bash
+# Clone the repo — there is no install step
 git clone https://github.com/soreavis/jsx-viewer.git
 cd jsx-viewer
 ```
@@ -34,12 +37,14 @@ cd jsx-viewer
 ### 2. Run
 
 ```bash
+# Serve the file and open it in your browser
 node jsx-viewer.js <file.jsx>
 ```
 
 ### 3. Export
 
 ```bash
+# Write a standalone .html next to the input and exit
 node jsx-viewer.js <file.jsx> --export
 ```
 
@@ -62,6 +67,14 @@ node jsx-viewer.js <file.jsx> [--port 3742] [--export]
 The viewer starts a local HTTP server and serves a shell page that loads React 18 and Babel Standalone from CDN. On each request, `jsx-viewer.js` reads your file, strips/rewrites ES module `import` statements into CDN globals, and sends the transformed source to the browser where Babel transpiles JSX in-place. A Server-Sent Events endpoint (`/events`) pushes a `reload` message whenever the file changes, triggering a full page refresh.
 
 Export mode skips the server and writes a self-contained HTML file with the transformed source embedded inline.
+
+## Documentation
+
+- [Getting started](docs/getting-started.md) — requirements and a first run
+- [Usage](docs/usage.md) — command line reference and exit codes
+- [How it works](docs/how-it-works.md) — the transform, the watcher, and the reload path
+- [Supported syntax](docs/supported-syntax.md) — which import and export forms work
+- [Troubleshooting](docs/troubleshooting.md) — errors and what causes them
 
 ## Troubleshooting
 
